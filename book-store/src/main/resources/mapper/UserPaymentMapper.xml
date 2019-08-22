@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.UserPaymentMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.UserPayment">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="card_name" jdbcType="VARCHAR" property="cardName" />
+    <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
+    <result column="cvc" jdbcType="INTEGER" property="cvc" />
+    <result column="default_payment" jdbcType="BIT" property="defaultPayment" />
+    <result column="expiry_month" jdbcType="INTEGER" property="expiryMonth" />
+    <result column="expiry_year" jdbcType="INTEGER" property="expiryYear" />
+    <result column="holder_name" jdbcType="VARCHAR" property="holderName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+</mapper>

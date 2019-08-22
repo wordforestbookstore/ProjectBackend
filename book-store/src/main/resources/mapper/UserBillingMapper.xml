@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.UserBillingMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.UserBilling">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_billing_city" jdbcType="VARCHAR" property="userBillingCity" />
+    <result column="user_billing_country" jdbcType="VARCHAR" property="userBillingCountry" />
+    <result column="user_billing_name" jdbcType="VARCHAR" property="userBillingName" />
+    <result column="user_billing_state" jdbcType="VARCHAR" property="userBillingState" />
+    <result column="user_billing_street1" jdbcType="VARCHAR" property="userBillingStreet1" />
+    <result column="user_billing_street2" jdbcType="VARCHAR" property="userBillingStreet2" />
+    <result column="user_billing_zipcode" jdbcType="VARCHAR" property="userBillingZipcode" />
+    <result column="user_payment_id" jdbcType="BIGINT" property="userPaymentId" />
+  </resultMap>
+</mapper>

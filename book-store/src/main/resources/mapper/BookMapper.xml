@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.BookMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.Book">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="active" jdbcType="BIT" property="active" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="format" jdbcType="VARCHAR" property="format" />
+    <result column="in_stock_number" jdbcType="INTEGER" property="inStockNumber" />
+    <result column="isbn" jdbcType="BIGINT" property="isbn" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="list_price" jdbcType="DOUBLE" property="listPrice" />
+    <result column="number_of_pages" jdbcType="INTEGER" property="numberOfPages" />
+    <result column="our_price" jdbcType="DOUBLE" property="ourPrice" />
+    <result column="publication_date" jdbcType="VARCHAR" property="publicationDate" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="shipping_weight" jdbcType="DOUBLE" property="shippingWeight" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.UserShippingMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.UserShipping">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_shipping_city" jdbcType="VARCHAR" property="userShippingCity" />
+    <result column="user_shipping_country" jdbcType="VARCHAR" property="userShippingCountry" />
+    <result column="user_shipping_default" jdbcType="BIT" property="userShippingDefault" />
+    <result column="user_shipping_name" jdbcType="VARCHAR" property="userShippingName" />
+    <result column="user_shipping_state" jdbcType="VARCHAR" property="userShippingState" />
+    <result column="user_shipping_street1" jdbcType="VARCHAR" property="userShippingStreet1" />
+    <result column="user_shipping_street2" jdbcType="VARCHAR" property="userShippingStreet2" />
+    <result column="user_shipping_zipcode" jdbcType="VARCHAR" property="userShippingZipcode" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+</mapper>

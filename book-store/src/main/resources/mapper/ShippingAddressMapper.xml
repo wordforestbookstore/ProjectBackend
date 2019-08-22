@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.ShippingAddressMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.ShippingAddress">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shipping_address_city" jdbcType="VARCHAR" property="shippingAddressCity" />
+    <result column="shipping_address_country" jdbcType="VARCHAR" property="shippingAddressCountry" />
+    <result column="shipping_address_name" jdbcType="VARCHAR" property="shippingAddressName" />
+    <result column="shipping_address_state" jdbcType="VARCHAR" property="shippingAddressState" />
+    <result column="shipping_address_street1" jdbcType="VARCHAR" property="shippingAddressStreet1" />
+    <result column="shipping_address_street2" jdbcType="VARCHAR" property="shippingAddressStreet2" />
+    <result column="shipping_address_zipcode" jdbcType="VARCHAR" property="shippingAddressZipcode" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.23.1:3306/bookstoredatabase?useUnicode=true&characterEncoding=gbk&useSSL=false&serverTimezone=UTC
+      username: root
+      password: 512088
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  type-aliases-package: com.eins.book.store.entity
+  mapper-locations: classpath:mapper/*.xml

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eins.book.store.dao.CartItemMapper">
+  <resultMap id="BaseResultMap" type="com.eins.book.store.entity.CartItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="qty" jdbcType="INTEGER" property="qty" />
+    <result column="subtotal" jdbcType="DECIMAL" property="subtotal" />
+    <result column="book_id" jdbcType="BIGINT" property="bookId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="shopping_cart_id" jdbcType="BIGINT" property="shoppingCartId" />
+  </resultMap>
+</mapper>
