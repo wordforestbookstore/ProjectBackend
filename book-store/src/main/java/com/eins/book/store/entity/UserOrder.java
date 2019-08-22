@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
+/**
+ * 用户订单 实体
+ */
 @Table(name = "bookstoredatabase.user_order")
 public class UserOrder {
     @Id

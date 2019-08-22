@@ -2,6 +2,9 @@ package com.eins.book.store.entity;
 
 import javax.persistence.*;
 
+/**
+ * 加入购物车的图书 实体
+ */
 @Table(name = "bookstoredatabase.book_to_cart_item")
 public class BookToCartItem {
     @Id

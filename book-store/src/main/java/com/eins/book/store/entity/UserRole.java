@@ -2,6 +2,9 @@ package com.eins.book.store.entity;
 
 import javax.persistence.*;
 
+/**
+ * 用户角色 实体
+ */
 @Table(name = "bookstoredatabase.user_role")
 public class UserRole {
     @Id

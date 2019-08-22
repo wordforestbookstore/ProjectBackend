@@ -2,6 +2,9 @@ package com.eins.book.store.entity;
 
 import javax.persistence.*;
 
+/**
+ * 发货地址 实体
+ */
 @Table(name = "bookstoredatabase.shipping_address")
 public class ShippingAddress {
     @Id

@@ -3,6 +3,9 @@ package com.eins.book.store.entity;
 import java.util.Date;
 import javax.persistence.*;
 
+/**
+ * 密码Token 实体
+ */
 @Table(name = "bookstoredatabase.password_reset_token")
 public class PasswordResetToken {
     @Id

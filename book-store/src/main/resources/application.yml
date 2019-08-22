@@ -1,7 +1,7 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://192.168.23.1:3306/bookstoredatabase?useUnicode=true&characterEncoding=gbk&useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://192.168.1.102:3306/bookstoredatabase?useUnicode=true&characterEncoding=gbk&useSSL=false&serverTimezone=UTC
       username: root
       password: 512088
       initial-size: 1

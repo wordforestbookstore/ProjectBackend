@@ -2,6 +2,9 @@ package com.eins.book.store.entity;
 
 import javax.persistence.*;
 
+/**
+ * 用户发货 实体
+ */
 @Table(name = "bookstoredatabase.user_shipping")
 public class UserShipping {
     @Id

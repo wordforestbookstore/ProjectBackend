@@ -17,4 +17,4 @@ password is: 512088
 
 
 
-fill them in your config files and then you can access the database.
+Fill them in your config files and then you can access the database.

@@ -3,6 +3,9 @@ package com.eins.book.store.entity;
 import java.math.BigDecimal;
 import javax.persistence.*;
 
+/**
+ * 购物车条目 实体
+ */
 @Table(name = "bookstoredatabase.cart_item")
 public class CartItem {
     @Id
