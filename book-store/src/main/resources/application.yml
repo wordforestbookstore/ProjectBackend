@@ -13,3 +13,6 @@ spring:
 mybatis:
   type-aliases-package: com.eins.book.store.entity
   mapper-locations: classpath:mapper/*.xml
+
+server:
+  port: 8080
