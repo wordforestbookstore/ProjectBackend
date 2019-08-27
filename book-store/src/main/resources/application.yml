@@ -1,7 +1,7 @@
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/bookstoredatabase?useUnicode=true&characterEncoding=gbk&useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://49.235.51.43:3306/bookstoredatabase?useUnicode=true&characterEncoding=gbk&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       username: root
       password: 1234
       initial-size: 1
@@ -10,9 +10,17 @@ spring:
       test-on-borrow: true
       driver-class-name: com.mysql.cj.jdbc.Driver
 
+  mvc:
+    static-path-pattern: /img/**
+
+  resources:
+    static-locations: file:/usr/bookstore/webapp/upload
+
 mybatis:
   type-aliases-package: com.eins.book.store.entity
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 server:
   port: 8080

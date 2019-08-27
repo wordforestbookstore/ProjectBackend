@@ -1,13 +1,19 @@
-# ProjectBackend
+# Project Backend
 The backend of WordForestBookStore, using Spring Boot and Mybatis.
 
-Now it has a basic framework, and the TABLEs of database have been created, you can access the database by these:
+
+
+The admin portal had been successfully completed. Now you can login, see the booklist, add books with book info included book's cover. You can also do CRUD with books. 
+
+
+
+We also deploy it to the server in the docker.
 
 
 
 database name is: bookstoredatabase
 
-IP address is: 192.168.1.102
+IP address is: 49.235.51.43
 
 port is: 3306
 
@@ -19,6 +25,4 @@ password is: 1234
 
 Fill them in your config files and then you can access the database.
 
-
-
-We have completed the login module, which can use Cookie Confirm.
+--By Einsturing
