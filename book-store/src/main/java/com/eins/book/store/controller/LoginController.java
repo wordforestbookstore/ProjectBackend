@@ -83,8 +83,32 @@ public class LoginController {
             }
         }
         else {
-            httpServletResponse.setContentType("text/plain");
-            return new ResponseEntity("You are not admin!", HttpStatus.UNAUTHORIZED);
+            Object user = userService.login(ReqUser.getUsername(), ReqUser.getPassword());
+            if(user == null) {
+                httpServletResponse.setContentType("text/plain");
+                return new ResponseEntity("Username not exits!", HttpStatus.BAD_REQUEST);
+            }
+            else {
+                if(user.equals("Wrong password!")) {
+                    httpServletResponse.setContentType("text/plain");
+                    return new ResponseEntity("Wrong password!", HttpStatus.BAD_REQUEST);
+                }
+                else {
+                    User loginUser = (User) user;
+                    String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
+
+                    System.out.println(cookie);
+
+                    loginmap.put(cookie, (User) user);
+                    Map<String, Object> mp = new HashMap<String, Object>();
+                    mp.put("userInfo", user);
+                    mp.put("cookieID", cookie);
+
+                    httpServletResponse.setContentType("application/json");
+                    return new ResponseEntity(mp, HttpStatus.OK);
+                }
+            }
+
         }
     }
 

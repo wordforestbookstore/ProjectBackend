@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,5 +56,12 @@ public class BookStoreApplicationTests {
     public void testSha256() {
         String str = "123456";
         System.out.println(EncryptUtil.getSha256(str));
+    }
+
+    @Test
+    public void testdate() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //Date data = new df.format(new Date());
+        //System.out.println(data);
     }
 }
