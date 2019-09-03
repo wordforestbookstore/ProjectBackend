@@ -2,10 +2,7 @@ package com.eins.book.store.service.Impl;
 
 import com.eins.book.store.commons.EncryptUtil;
 import com.eins.book.store.dao.*;
-import com.eins.book.store.entity.PasswordResetToken;
-import com.eins.book.store.entity.ShoppingCart;
-import com.eins.book.store.entity.User;
-import com.eins.book.store.entity.UserRole;
+import com.eins.book.store.entity.*;
 import com.eins.book.store.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
+
+    @Autowired
+    private TokenKindMapper tokenKindMapper;
+
+    @Autowired
+    private CartItemMapper cartItemMapper;
 
 
     @Override
@@ -73,11 +76,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOneByExample(example);
 
         if (user == null) {
-            System.out.println("UserName is not registered");
             return false;
         }
         else {
-            System.out.println("UserName is registered");
             return true;
         }
     }
@@ -90,86 +91,10 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOneByExample(example);
 
         if (user == null) {
-            System.out.println("email is not registered");
             return false;
         }
         else {
-            System.out.println("email is registered");
             return true;
-        }
-    }
-
-    /*插入Token*/
-    @Override
-    public void insertToken(String token, User user, Date time) {
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setToken(token);
-        passwordResetToken.setUserId(user.getId());
-        passwordResetToken.setExpiryDate(time);
-        passwordResetTokenMapper.insert(passwordResetToken);
-
-    }
-
-    /*插入注册用户*/
-    @Override
-    public void InsertUser(User user) {
-        userMapper.insert(user);
-
-    }
-    /*在邮箱验证之后激活注册用户*/
-    @Override
-    public void eableUser(User user){
-        /*将表单中获得的user按id在数据库中找到user2， 状态设置成激活之后插入*/
-        Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("username", user.getUsername());
-        System.out.println("userName: " + user.getUsername());
-        User user2 = userMapper.selectOneByExample(example);
-        user2.setEnabled(true);
-        user2.setPassword(user.getPassword());
-        userMapper.updateByPrimaryKeySelective(user2);
-        /*将用户角色表插入*/
-        UserRole userRole = new UserRole();
-        userRole.setRoleId(1);
-        userRole.setUserId(user2.getId());
-        userRoleMapper.insert(userRole);
-        /*为该用户初始化一个购物车插入*/
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setUserId(user2.getId());
-        shoppingCart.setGrandTotal(null);
-        shoppingCartMapper.insert(shoppingCart);
-
-
-    }
-
-
-    @Override
-    public Long FindUserToken(String token) {
-        Example example = new Example(PasswordResetToken.class);
-        example.createCriteria().andEqualTo("token", token);
-        PasswordResetToken passwordResetToken = passwordResetTokenMapper.selectOneByExample(example);
-        if (passwordResetToken == null) {
-            System.out.println("Token is  invalid");
-            return 0l;
-        }
-        else {
-
-            System.out.println("Find Token is " + passwordResetToken.getUserId());
-            return passwordResetToken.getUserId();
-        }
-    }
-
-    @Override
-    public User getUserById(Long id) {
-        Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("id", id);
-        User user = userMapper.selectOneByExample(example);
-        if(user == null) {
-            System.out.println("Not Find user");
-            return null;
-        }
-        else {
-            System.out.println("Find User");
-            return user;
         }
     }
 
@@ -180,16 +105,129 @@ public class UserServiceImpl implements UserService {
         Example example = new Example(User.class);
         example.createCriteria().andEqualTo("username", username);
         User user2 = userMapper.selectOneByExample(example);
-        System.out.println("currentPassword " + currentPassword + " user2 word: " + user2.getPassword());
         if(user2.getPassword().equals(currentPassword)) {
-            System.out.println("Password is same");
             return true;
         }
         else {
-            System.out.println("Password is not same");
             return false;
         }
     }
+
+    /*插入Token*/
+    @Override
+    public void insertToken(String token, User user, Date time, String kind) {
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setToken(token);
+        passwordResetToken.setUserId(user.getId());
+        passwordResetToken.setExpiryDate(time);
+        passwordResetTokenMapper.insert(passwordResetToken);
+
+        TokenKind tokenKind = new TokenKind();
+        tokenKind.setToken(token);
+        tokenKind.setKind(kind);
+        tokenKindMapper.insert(tokenKind);
+    }
+
+    /*删除token*/
+    @Override
+    public boolean delToken(Long id) {
+
+        Example example = new Example(PasswordResetToken.class);
+        example.createCriteria().andEqualTo("userId", id);
+        PasswordResetToken passwordResetToken = passwordResetTokenMapper.selectOneByExample(example);
+        if (passwordResetToken == null) {
+            return false;
+        }
+        else {
+
+            passwordResetTokenMapper.delete(passwordResetToken);
+
+            Example example1 = new Example(TokenKind.class);
+            example1.createCriteria().andEqualTo("token", passwordResetToken.getToken());
+            TokenKind tokenKind = tokenKindMapper.selectOneByExample(example1);
+            tokenKindMapper.delete(tokenKind);
+            return true;
+        }
+    }
+
+    /*通过token或者其类型*/
+    @Override
+    public String getKindByToken(String token) {
+        Example example  = new Example(TokenKind.class);
+        example.createCriteria().andEqualTo("token", token);
+        TokenKind tokenKind = tokenKindMapper.selectOneByExample(example);
+        if(tokenKind == null) {
+            return null;
+        }
+        else {
+            return tokenKind.getKind();
+        }
+    }
+
+    /*通过token找到userid*/
+    @Override
+    public Long FindUserToken(String token) {
+        Example example = new Example(PasswordResetToken.class);
+        example.createCriteria().andEqualTo("token", token);
+        PasswordResetToken passwordResetToken = passwordResetTokenMapper.selectOneByExample(example);
+        if (passwordResetToken == null) {
+            return 0l;
+        }
+        else {
+            return passwordResetToken.getUserId();
+        }
+    }
+
+    /*插入注册用户*/
+    @Override
+    public void InsertUser(User user) {
+        userMapper.insert(user);
+    }
+
+    /*在邮箱验证之后激活注册用户*/
+    @Override
+    public void eableUser(User user){
+        /*将表单中获得的user按id在数据库中找到user2， 状态设置成激活之后插入*/
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("username", user.getUsername());
+        User user2 = userMapper.selectOneByExample(example);
+        user2.setEnabled(true);
+        user2.setPassword(user.getPassword());
+        user2.setEmail(user.getEmail());
+        user2.setFirstName(user.getFirstName());
+        user2.setLastName(user.getLastName());
+        user2.setPhone(user.getPhone());
+        userMapper.updateByPrimaryKeySelective(user2);
+        /*将用户角色表插入*/
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(1);
+        userRole.setUserId(user2.getId());
+        userRoleMapper.insert(userRole);
+        /*为该用户初始化一个购物车插入*/
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUserId(user2.getId());
+        shoppingCart.setGrandTotal(0);
+        shoppingCartMapper.insert(shoppingCart);
+    }
+
+
+
+    /*通过id找到user对象*/
+    @Override
+    public User getUserById(Long id) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("id", id);
+        User user = userMapper.selectOneByExample(example);
+        if(user == null) {
+            return null;
+        }
+        else {
+            return user;
+        }
+    }
+
+
+    /*通过用户名获得用户ID*/
     @Override
     public  Long getIdByName(String username) {
         Example example = new Example(User.class);
@@ -202,20 +240,25 @@ public class UserServiceImpl implements UserService {
             return user.getId();
         }
     }
-    /*删除token*/
+
+    /*通过用户邮箱找到该用户id*/
     @Override
-    public boolean delToken(Long id) {
-        Example example = new Example(PasswordResetToken.class);
-        example.createCriteria().andEqualTo("userId", id);
-        PasswordResetToken passwordResetToken = passwordResetTokenMapper.selectOneByExample(example);
-        if (passwordResetToken == null) {
-            System.out.println("该token不存在");
-            return false;
+    public  Long getIdByEmail(String email) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("email", email);
+        User user = userMapper.selectOneByExample(example);
+        if (user == null) {
+            return 0l;
         }
         else {
-            passwordResetTokenMapper.delete(passwordResetToken);
-            System.out.println("删除成功");
-            return true;
+            return user.getId();
         }
+    }
+
+    /*修改用户信息*/
+    @Override
+    public void updateUser(User user) {
+        if(user.getId() == null) user.setId(getIdByName(user.getUsername()));
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

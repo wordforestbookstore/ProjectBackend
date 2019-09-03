@@ -21,8 +21,8 @@ public class BookController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getBook(@PathVariable("id") int id, String cookie, HttpServletResponse httpServletResponse) {
-        if (CookieUtils.CookieConfirm(cookie)) {
+    public ResponseEntity getBook(@PathVariable("id") Long id, String cookie, HttpServletResponse httpServletResponse) {
+        /*if (CookieUtils.CookieConfirm(cookie)) {*/
             Book book = (Book) bookService.getBookByID(id);
             if (book != null) {
                 httpServletResponse.setContentType("application/json");
@@ -30,10 +30,10 @@ public class BookController {
             }
             httpServletResponse.setContentType("text/plain");
             return new ResponseEntity("Book not exits!", HttpStatus.BAD_REQUEST);
-        }
+        /*}*/
 
-        httpServletResponse.setContentType("text/plain");
-        return new ResponseEntity("No Permission!", HttpStatus.UNAUTHORIZED);
+        //httpServletResponse.setContentType("text/plain");
+       // return new ResponseEntity("No Permission!", HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/img/{id}", method = RequestMethod.PUT)
@@ -60,7 +60,7 @@ public class BookController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity updateBook(@PathVariable("id") int id, @RequestBody Book newBook, String cookie, HttpServletResponse httpServletResponse) {
+    public ResponseEntity updateBook(@PathVariable("id") Long id, @RequestBody Book newBook, String cookie, HttpServletResponse httpServletResponse) {
         if(CookieUtils.CookieConfirm(cookie)) {
             Book book = (Book) bookService.getBookByID(id);
             if(book != null) {
@@ -78,7 +78,7 @@ public class BookController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity deleteBook(@PathVariable("id") int id, String cookie, HttpServletResponse httpServletResponse) {
+    public ResponseEntity deleteBook(@PathVariable("id") Long id, String cookie, HttpServletResponse httpServletResponse) {
         if(CookieUtils.CookieConfirm(cookie)) {
             Book book = (Book) bookService.getBookByID(id);
             bookService.DeleteBook(book);

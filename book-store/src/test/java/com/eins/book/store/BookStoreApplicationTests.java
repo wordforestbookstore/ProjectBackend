@@ -1,9 +1,12 @@
 package com.eins.book.store;
 
+import com.eins.book.store.commons.DateUtils;
 import com.eins.book.store.commons.EncryptUtil;
 import com.eins.book.store.dao.BookMapper;
 import com.eins.book.store.entity.Book;
+import com.eins.book.store.entity.CartItem;
 import com.eins.book.store.service.BookService;
+import com.eins.book.store.service.Impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.junit.Test;
@@ -33,6 +36,8 @@ public class BookStoreApplicationTests {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserServiceImpl userService;
 
     @Test
     public void testSelect() {
@@ -60,8 +65,13 @@ public class BookStoreApplicationTests {
 
     @Test
     public void testdate() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //Date data = new df.format(new Date());
-        //System.out.println(data);
+        CartItem cartItem = new CartItem();
+        cartItem.setBookId(1l);
+        cartItem.setOrderId(null);
+        cartItem.setQty(1);
+        cartItem.setShoppingCartId(24l);
+       // cartItem.setSubtotal(13.46);
+        System.out.println("CartItem.getSubtotal : " + cartItem.getSubtotal() + " totalPrice: " + 13.46);
+       // userService.insertCartItem(cartItem);
     }
 }

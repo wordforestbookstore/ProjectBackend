@@ -42,7 +42,7 @@ public class SimpleMailSender {
         }
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
         Session sendMailSession = Session
-                .getDefaultInstance(pro, authenticator);
+                .getInstance(pro, authenticator);
         try {
             // 根据session创建一个邮件消息
             Message mailMessage = new MimeMessage(sendMailSession);

@@ -113,5 +113,57 @@ public class EmailUtils {
         SimpleMailSender sender = new SimpleMailSender();
         sender.sendHtmlMail(mailSenderInfo);
     }
+
+    public void sendcreatepassword(String address, String token, String initPassword){
+        mailSenderInfo = new MailSenderInfo();
+        mailSenderInfo.setMailServerHost("smtp.qq.com");
+        mailSenderInfo.setMailServerPort("465");
+        mailSenderInfo.setUserName("1243299228@qq.com");
+        mailSenderInfo.setPassword("mrnrfvzyynyafeeg");
+        mailSenderInfo.setFromAddress("1243299228@qq.com");
+        mailSenderInfo.setToAddress(address);
+
+        mailSenderInfo.setValidate(true);
+
+        mailSenderInfo.setSubject("辞林书店-找回密码");
+        Date date = new Date();
+        String content = String.format(
+                "<!DOCTYPE html>"+
+                        "<html lang=\"en\">"+
+                        "<head>"+
+                        "<meta charset=\"UTF-8\" />"+
+                        "<title></title>"+
+                        "</head>"+
+                        "<style type=\"text/css\">html,body{margin: 0;padding: 0;font-size: 14px;}.container{width: 880px;margin:0 auto;background: #e7f5ff;height:800px;padding-top: 80px;margin-top: 20px;}.container-con{width:680px;margin:0 auto;background:#fff;height:600px;padding:20px;}.eamil-top{font-size: 14px;}.eamil-top>span{color:#000;font-weight: bold;}.eamil-top2{font-size: 14px;padding-left: 16px;margin-bottom: 30px;}.eamil-con{padding:20px;}.eamil-con>p{line-height: 20px;}.top-img{background:url(\"images/tt0_03.png\") no-repeat;background-size: cover; width:722px;height:100px;margin:0 auto;}.fpptwe{line-height: 30px;}.footer{float: right;}.jingao{font-size: 12px;color:#888}</style>"+
+                        "<body>"+
+                        "<div class=\"container\">"+
+                        "<div class=\"top-img\"></div>"+
+                        "<div class=\"container-con\">"+
+                        "<p class=\"eamil-top\">"+
+                        "http://localhost:8080/newUser?token="+ token +//完善信息链接
+                        "</p>"+
+                        "<p class=\"eamil-top2\">您好！</p>"+
+                        "<div class=\"eamil-con\">"+
+                        "<p>请单击链接完成邮箱验证，并完善您的个人信息。</p>"+
+                        "<p>"+
+                        "您的验证密码为：<span>%s</span>"+//验证密码
+                        "</p>"+
+                        //"<img src='http://img.mp.itc.cn/upload/20160326/73a64c935e7d4c9594bdf86d76399226_th.jpg' />"+
+                        "</div>"+
+                        "<p class=\"jingao\">（这是一封系统自动发送的邮件，请不要直接回复。）</p>"+
+                        "<div class=\"footer\">"+
+                        "<p></p>"+
+                        "<span>%tF %tT</span>"+
+                        "</div>"+
+                        "</p>"+
+                        "</div>"+
+                        "</div>"+
+                        "</body>"+
+                        "</html>", initPassword, date, date);
+        mailSenderInfo.setContent(content);
+
+        SimpleMailSender sender = new SimpleMailSender();
+        sender.sendHtmlMail(mailSenderInfo);
+    }
 }
 

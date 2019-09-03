@@ -22,15 +22,19 @@ public class MainController {
 
     @RequestMapping(value = "/booklist", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getBookList(int l, int r, HttpServletResponse httpServletResponse) {
+    public ResponseEntity getBookList(int l, int r, String category, HttpServletResponse httpServletResponse) {
         System.out.println("收到/booklist GET请求");
-
         if(l > r || l < 1) {
             httpServletResponse.setContentType("text/plain");
             return new ResponseEntity("Index error!", HttpStatus.BAD_REQUEST);
         }
-        List<Book> bookList = (List<Book>) bookService.getBookList(l, r);
-
+        List<Book> bookList = null;
+        if(category == null) {
+            bookList = (List<Book>) bookService.getBookList(l, r);
+        }
+        else {
+            bookList = (List<Book>) bookService.getBookListByCategory(l, r, category);
+        }
         httpServletResponse.setContentType("application/json");
         return new ResponseEntity(bookList, HttpStatus.OK);
     }
