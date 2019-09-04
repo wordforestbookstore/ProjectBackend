@@ -65,13 +65,9 @@ public class BookStoreApplicationTests {
 
     @Test
     public void testdate() {
-        CartItem cartItem = new CartItem();
-        cartItem.setBookId(1l);
-        cartItem.setOrderId(null);
-        cartItem.setQty(1);
-        cartItem.setShoppingCartId(24l);
-       // cartItem.setSubtotal(13.46);
-        System.out.println("CartItem.getSubtotal : " + cartItem.getSubtotal() + " totalPrice: " + 13.46);
-       // userService.insertCartItem(cartItem);
+        String Hour = DateUtils.getMonth();
+        int Month = Integer.parseInt(Hour);
+        int Year = Integer.parseInt(DateUtils.getYear());
+        System.out.println("Now Month is: " + Month + "and year is " + Year);
     }
 }

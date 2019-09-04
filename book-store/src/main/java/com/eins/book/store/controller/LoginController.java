@@ -38,8 +38,10 @@ public class LoginController {
                 }
                 else {
                     userid = ConstantUtils.adminLoginMap.get(cookie);
+                    User user = userService.getUserById(userid);
+                    user.setPassword(null);
                     httpServletResponse.setContentType("application/json");
-                    return new ResponseEntity(userid, HttpStatus.OK);
+                    return new ResponseEntity(user, HttpStatus.OK);
                 }
             }
             else {
@@ -49,8 +51,10 @@ public class LoginController {
                 }
                 else {
                     userid = ConstantUtils.userLoginMap.get(cookie);
+                    User user = userService.getUserById(userid);
+                    user.setPassword(null);
                     httpServletResponse.setContentType("application/json");
-                    return new ResponseEntity(userid, HttpStatus.OK);
+                    return new ResponseEntity(user, HttpStatus.OK);
                 }
             }
         }

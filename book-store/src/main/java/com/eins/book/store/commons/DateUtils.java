@@ -232,6 +232,30 @@ public class DateUtils {
     }
 
     /**
+     * 得到现在年份
+     */
+    public static String getYear() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        String hour;
+        hour = dateString.substring(0, 4);
+        return hour;
+    }
+
+    /**
+     * 得到现在月份
+     */
+    public static String getMonth() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        String hour;
+        hour = dateString.substring(5, 7);
+        return hour;
+    }
+
+    /**
      * 得到现在小时
      */
     public static String getHour() {
