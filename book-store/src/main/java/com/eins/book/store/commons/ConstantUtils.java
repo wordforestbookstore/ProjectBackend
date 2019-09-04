@@ -9,7 +9,7 @@ import java.util.Map;
  * 常量工具类
  */
 public class ConstantUtils {
-    public static Map<String, Long> loginmap = new HashMap<String, Long>();
-
-   // public static Map<String, User> loginmap = new HashMap<String, User>();
+    public static Map<String, Long> adminLoginMap = new HashMap<String, Long>();
+    public static Map<String, Long> userLoginMap = new HashMap<String, Long>();
+    public static Boolean productionTip = false;
 }

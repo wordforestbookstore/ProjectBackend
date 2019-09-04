@@ -14,7 +14,7 @@ spring:
     static-path-pattern: /img/**
 
   resources:
-    static-locations: file:C:/Users/Administrator/Desktop/book-store/webapp/upload
+    static-locations: file:D:\WorkSpace\test\book-store\webapp\upload
 
 mybatis:
   type-aliases-package: com.eins.book.store.entity

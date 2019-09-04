@@ -88,7 +88,7 @@ public class EmailUtils {
                         "<div class=\"top-img\"></div>"+
                         "<div class=\"container-con\">"+
                         "<p class=\"eamil-top\">"+
-                        "http://localhost:8080/newUser?token="+ token +//完善信息链接
+                        (ConstantUtils.productionTip ? "http://49.235.51.43:8080/newUser?token=" : "http://localhost:8080/newUser?token=") + token +//完善信息链接
                         "</p>"+
                         "<p class=\"eamil-top2\">您好！</p>"+
                         "<div class=\"eamil-con\">"+
@@ -140,7 +140,7 @@ public class EmailUtils {
                         "<div class=\"top-img\"></div>"+
                         "<div class=\"container-con\">"+
                         "<p class=\"eamil-top\">"+
-                        "http://localhost:8080/newUser?token="+ token +//完善信息链接
+                        (ConstantUtils.productionTip ? "http://49.235.51.43:8080/newUser?token=" : "http://localhost:8080/newUser?token=")+ token +//完善信息链接
                         "</p>"+
                         "<p class=\"eamil-top2\">您好！</p>"+
                         "<div class=\"eamil-con\">"+

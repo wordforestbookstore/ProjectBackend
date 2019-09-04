@@ -25,7 +25,7 @@ public class UserController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public ResponseEntity edit(String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            Long userid = ConstantUtils.loginmap.get(cookie);
+            Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
             httpServletResponse.setContentType("application/json");
             return new ResponseEntity(user, HttpStatus.OK);

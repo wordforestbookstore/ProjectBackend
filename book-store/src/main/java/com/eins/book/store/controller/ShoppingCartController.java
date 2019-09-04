@@ -39,7 +39,7 @@ public class ShoppingCartController {
     @RequestMapping(value = "/shopping/{id}", method = RequestMethod.POST)
     public ResponseEntity addCart(@PathVariable("id") Long bookId, int num, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            Long userid = ConstantUtils.loginmap.get(cookie);
+            Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
             if(cartService.checkBookIdExisetInCartItem(bookId)) {
                 /*update cart_item (id, bookid, orderid, qty, shopping_cart_id, subtotal) */
@@ -100,7 +100,7 @@ public class ShoppingCartController {
     @RequestMapping(value = "/cart/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteCart(@PathVariable("id") Long bookId, int num, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            Long userid = ConstantUtils.loginmap.get(cookie);
+            Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
             Long shoppingCartId = cartService.getShoppingCartIdByUserId(userid);
             Long cartItemId = cartService.getCartItemIdByBookIdAndCartId(bookId, shoppingCartId);
@@ -150,7 +150,7 @@ public class ShoppingCartController {
     @ResponseBody
     public ResponseEntity getCart(String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if(CookieUtils.CookieConfirm(cookie)) {
-            Long userid = ConstantUtils.loginmap.get(cookie);
+            Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
             Long shoppingCartId = cartService.getShoppingCartIdByUserId(userid);
 
