@@ -1,11 +1,14 @@
 package com.eins.book.store;
 
 import com.eins.book.store.commons.DateUtils;
+import com.eins.book.store.commons.EmailUtils;
 import com.eins.book.store.commons.EncryptUtil;
 import com.eins.book.store.dao.BookMapper;
+import com.eins.book.store.dao.CartItemMapper;
 import com.eins.book.store.entity.Book;
 import com.eins.book.store.entity.CartItem;
 import com.eins.book.store.service.BookService;
+import com.eins.book.store.service.CartService;
 import com.eins.book.store.service.Impl.UserServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -39,6 +42,9 @@ public class BookStoreApplicationTests {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private CartItemMapper cartItemMapper;
+
     @Test
     public void testSelect() {
         List<Book> books = bookMapper.selectAll();
@@ -69,5 +75,11 @@ public class BookStoreApplicationTests {
         int Month = Integer.parseInt(Hour);
         int Year = Integer.parseInt(DateUtils.getYear());
         System.out.println("Now Month is: " + Month + "and year is " + Year);
+    }
+
+    @Test
+    public void testcartemail() {
+        List<CartItem> cartItems = cartItemMapper.selectAll();
+        new EmailUtils().sendcart("1243299228@qq.com", 1l, "MZX", "MZX", "XLW", "NJUST", "cn", "NJ", "210094", "MZX", "visa", "123", "4", "20", "MZX", "XLW", "NJUST", "cn", "NJ", "210094", new EmailUtils().initSummary(cartItems));
     }
 }
