@@ -67,7 +67,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity login(@RequestBody User ReqUser, Boolean admin, HttpServletResponse httpServletResponse,HttpServletRequest httpServletRequest) {
-        System.out.println(admin);
+
         if(admin == true) {
             if(userService.checkUserAdmin(ReqUser.getUsername())) {
                 Object user = userService.login(ReqUser.getUsername(), ReqUser.getPassword());
@@ -83,7 +83,7 @@ public class LoginController {
                     else {
                         User loginUser = (User) user;
                         String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
-                        System.out.println(cookie);
+
 
                         ConstantUtils.adminLoginMap.put(cookie, ((User) user).getId());
                         Map<String, Object> mp = new HashMap<String, Object>();
@@ -115,7 +115,7 @@ public class LoginController {
                         User loginUser = (User) user;
                         String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
 
-                        System.out.println(cookie);
+
 
                         ConstantUtils.userLoginMap.put(cookie, ((User) user).getId());
                         Map<String, Object> mp = new HashMap<String, Object>();

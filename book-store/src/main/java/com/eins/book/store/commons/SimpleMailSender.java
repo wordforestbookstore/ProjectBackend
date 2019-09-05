@@ -163,7 +163,6 @@ public class SimpleMailSender {
             mailMessage.setContent(mainPart);
             // 发送邮件
             Transport.send(mailMessage);
-            System.out.println("发送成功！");
             return true;
         } catch (MessagingException ex) {
             ex.printStackTrace();
@@ -197,7 +196,7 @@ public class SimpleMailSender {
                     mailInfo.getUserName(), mailInfo.getPassword());
             // 创建邮件的接收者地址，并设置到邮件消息中
             transport.close();
-            System.out.println("发送成功！");
+
             return true;
         } catch (AddressException e) {
             e.printStackTrace();

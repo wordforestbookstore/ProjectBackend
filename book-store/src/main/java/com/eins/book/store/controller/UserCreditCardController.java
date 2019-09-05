@@ -2,7 +2,6 @@ package com.eins.book.store.controller;
 
 import com.eins.book.store.commons.ConstantUtils;
 import com.eins.book.store.commons.CookieUtils;
-import com.eins.book.store.commons.EncryptUtil;
 import com.eins.book.store.entity.User;
 import com.eins.book.store.entity.UserBilling;
 import com.eins.book.store.entity.UserPayment;
@@ -25,53 +24,12 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class UserController {
-
+public class UserCreditCardController {
     @Autowired
     private UserService userService;
 
     @Autowired
     private BillingService billingService;
-
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public ResponseEntity edit(String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
-        if (CookieUtils.CookieConfirm(cookie)) {
-            Long userId = ConstantUtils.userLoginMap.get(cookie);
-            User user = userService.getUserById(userId);
-            httpServletResponse.setContentType("application/json");
-            return new ResponseEntity(user, HttpStatus.OK);
-        }
-        httpServletResponse.setContentType("text/plain");
-        return new ResponseEntity("No Permission!", HttpStatus.UNAUTHORIZED);
-    }
-
-    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    public ResponseEntity saveEdit(@RequestBody User ReqUser,String cookie, String currentPassword, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
-        if (CookieUtils.CookieConfirm(cookie)) {
-            currentPassword = EncryptUtil.getSha256(currentPassword);
-            if(userService.confirmPassword(currentPassword, ReqUser)) {
-                Long id = userService.getIdByName(ReqUser.getUsername());
-                User user = userService.getUserById(id);
-
-                if(ReqUser.getPassword() == "" || ReqUser.getPassword() == null) {
-                    ReqUser.setPassword(user.getPassword());
-                }
-                else {
-                    ReqUser.setPassword(EncryptUtil.getSha256(ReqUser.getPassword()));
-                }
-                userService.updateUser(ReqUser);
-                httpServletResponse.setContentType("text/plain");
-                return new ResponseEntity("edit Successfully", HttpStatus.OK);
-            }
-            else {
-                httpServletResponse.setContentType("text/plain");
-                return new ResponseEntity("Wrong CurrentPassword", HttpStatus.BAD_REQUEST);
-            }
-        }
-        httpServletResponse.setContentType("text/plain");
-        return new ResponseEntity("No Permission!", HttpStatus.UNAUTHORIZED);
-    }
-
 
     @RequestMapping(value = "/addCreditCard", method = RequestMethod.POST)
     public ResponseEntity addCreditCard(@RequestBody Map<String, String> mp, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
@@ -79,8 +37,8 @@ public class UserController {
             Long userId = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userId);
             /*Insert user_payment(card_name, card_number, cvc, default_payment, expiry_month,
-            * exipy_year, holder_name, type, user_id);
-            * */
+             * exipy_year, holder_name, type, user_id);
+             * */
             UserPayment userPayment = new UserPayment();
 
             userPayment.setUserId(userId);
@@ -138,9 +96,9 @@ public class UserController {
 
 
             /*intsert into user_billing(user_billing_city, user_billing_country, user_billing_name)
-            * (user_billing_state, user_billing_street1, user_billing_street2, use_billing_zipcode)
-            * (user_payment_id)
-            * */
+             * (user_billing_state, user_billing_street1, user_billing_street2, use_billing_zipcode)
+             * (user_payment_id)
+             * */
 
             UserBilling userBilling = new UserBilling();
             userBilling.setUserBillingCity(mp.get("userbillingcity"));
@@ -176,7 +134,7 @@ public class UserController {
             /*一起插入防止只插入userPayment而没有插入userBilling*/
 
             billingService.insertUserPayment(userPayment);
-            Long userPaymentId = billingService.getUserPaymentIdByCardNameAndUserId(cardName, userId);
+            Long userPaymentId = billingService.getUserPaymentIdByUserIdAndCardName(userId, cardName);
             if(userPaymentId == null) {
                 return new ResponseEntity("userPaymentId is null", HttpStatus.BAD_REQUEST);
             }
@@ -257,6 +215,11 @@ public class UserController {
             userPayment.setUserId(userId);
             String cardName = mp.get("cardname");
             userPayment.setCardName(mp.get("cardname"));
+            if(billingService.checkCardNameAndUserIdExist(cardName, userId)) {
+                if(billingService.getUserPaymentIdByUserIdAndCardName(userId, cardName) != userPaymentId) {
+                    return new ResponseEntity("This cardname is exist", HttpStatus.BAD_REQUEST);
+                }
+            }
             if(userPayment.getCardName() == null || userPayment.getCardName() == "") {
                 httpServletResponse.setContentType("text/plain");
                 return new ResponseEntity("your cardname is null", HttpStatus.BAD_REQUEST);
@@ -266,6 +229,12 @@ public class UserController {
             if(userPayment.getCardNumber() == null || userPayment.getCardNumber() == "") {
                 httpServletResponse.setContentType("text/plain");
                 return new ResponseEntity("your cardnumber is null", HttpStatus.BAD_REQUEST);
+            }
+            String  cardNumber = mp.get("cardnumber");
+            if(billingService.checkCardNumberAndUserIdExist(mp.get("cardnumber"), userId)) {
+                if(billingService.getUserPaymentIdByUserIdAndCardNumber(userId, cardNumber) != userPaymentId) {
+                    return new ResponseEntity("This cardnumber is exist", HttpStatus.BAD_REQUEST);
+                }
             }
 
             String cvc = mp.get("cvc");
@@ -373,7 +342,7 @@ public class UserController {
             oldUserPayment.setDefaultPayment(false);
             UserPayment newUserPayment = billingService.getUserPaymentByUserPaymentId(userPaymentId);
             newUserPayment.setDefaultPayment(true);
-            System.out.println("oldId " + oldUserPayment.getId() + "new: " + newUserPayment.getId());
+
             billingService.updateUserPayment(oldUserPayment);
             billingService.updateUserPayment(newUserPayment);
             httpServletResponse.setContentType("text/plain");
@@ -404,11 +373,11 @@ public class UserController {
                 Long tmpId = Long.MAX_VALUE;
                 UserPayment tmpUserPayment = new UserPayment();
                 for (Long paymentId : userPaymentIds) {
-                   if(paymentId < tmpId) {
-                       tmpUserPayment = billingService.getUserPaymentByUserPaymentId(paymentId);
-                       tmpUserPayment.setDefaultPayment(true);
-                       tmpId = paymentId;
-                   }
+                    if(paymentId < tmpId) {
+                        tmpUserPayment = billingService.getUserPaymentByUserPaymentId(paymentId);
+                        tmpUserPayment.setDefaultPayment(true);
+                        tmpId = paymentId;
+                    }
                 }
                 billingService.updateUserPayment(tmpUserPayment);
             }
@@ -418,5 +387,4 @@ public class UserController {
         httpServletResponse.setContentType("text/plain");
         return new ResponseEntity("No Permission!", HttpStatus.UNAUTHORIZED);
     }
-
 }

@@ -41,10 +41,8 @@ public class BillingServicelmpl implements BillingService {
         example.createCriteria().andEqualTo("cardName", cardName).andEqualTo("userId", userid);
         UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
         if(userPayment == null) {
-            System.out.println("该cardName: " + cardName + "在该id: "+ userid + "不存在");
             return false;
         }
-        System.out.println("该cardName: " + cardName + "在该id: "+ userid + "不存在");
         return true;
     }
 
@@ -53,10 +51,8 @@ public class BillingServicelmpl implements BillingService {
         example.createCriteria().andEqualTo("cardNumber", cardNumber).andEqualTo("userId", userId);
         UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
         if(userPayment == null) {
-            System.out.println("该cardNumber: " + cardNumber + "在该id: "+ userId + "不存在");
             return false;
         }
-        System.out.println("该cardNumber: " + cardNumber + "在该id: "+ userId + "不存在");
         return true;
     }
 
@@ -73,15 +69,27 @@ public class BillingServicelmpl implements BillingService {
 
     /*通过userid获得user_paymentid*/
     @Override
-    public Long getUserPaymentIdByCardNameAndUserId(String cardName, Long userId) {
+    public Long getUserPaymentIdByUserIdAndCardName(Long userId, String cardName) {
         Example example = new Example(UserPayment.class);
         example.createCriteria().andEqualTo("cardName", cardName).andEqualTo("userId", userId);
         UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
         if(userPayment == null) {
-            System.out.println("通过cardName: " + cardName +" 和id: "+ userId + " 找到一个空的userpayment: "+ userPayment);
             return null;
         }
-        System.out.println("通过cardName: " + cardName +" 和id: "+ userId + " 找到一个userpaymentId: "+ userPayment.getId());
+        return userPayment.getId();
+    }
+
+    /*通过userid获得user_paymentid*/
+    @Override
+    public Long getUserPaymentIdByUserIdAndCardNumber(Long userId, String cardNumber) {
+        Example example = new Example(UserPayment.class);
+        example.createCriteria().andEqualTo("cardNumber", cardNumber).andEqualTo("userId", userId);
+        UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
+        if(userPayment == null) {
+
+            return null;
+        }
+
         return userPayment.getId();
     }
     /*通过userId获得user_paymentIds*/
@@ -104,7 +112,6 @@ public class BillingServicelmpl implements BillingService {
         example.createCriteria().andEqualTo("id", userPaymentId);
         UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
         if(userPayment == null) {
-            System.out.println("通过userPaymentId没有找到userPayment");
         }
         return userPayment;
     }

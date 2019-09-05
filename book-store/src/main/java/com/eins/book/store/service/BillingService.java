@@ -12,12 +12,14 @@ public interface BillingService {
     public boolean checkCardNumberAndUserIdExist(String cardNumber, Long userId);
     public void insertUserPayment(UserPayment userPayment);
     public void updateUserPayment(UserPayment userPayment);
-    public Long getUserPaymentIdByCardNameAndUserId(String cardName, Long userId);
+    public Long getUserPaymentIdByUserIdAndCardName(Long userId, String cardName);
+    public Long getUserPaymentIdByUserIdAndCardNumber(Long userId, String CardNumber);
     public List<Long> getUserPaymentIdsByUserId(Long userId);
     public UserPayment getUserPaymentByUserPaymentId(Long userPaymentId);
     public boolean getDefaultByUserPaymentId(Long userPaymentId);
     public Long getUserPaymentIdByDefaultTrue();
     public void delUserPayment(UserPayment userPayment);
+
     /*userBilling*/
     public void insertUserBilling(UserBilling userBilling);
     public void updateUserBilling(UserBilling userBilling);
