@@ -158,9 +158,24 @@ public class UserCreditCardController {
             for (Long userPaymentId : userPaymentIds) {
                 Map<String, String> mp1 = new HashMap<String, String>();
                 UserPayment userPayment = billingService.getUserPaymentByUserPaymentId(userPaymentId);
+                Long userBillingid = billingService.getUserBillingIdByUserPaymentId(userPaymentId);
+                UserBilling userBilling = billingService.getUserBillingByUserBillingId(userBillingid);
                 mp1.put("id", userPayment.getId().toString());
                 mp1.put("default", userPayment.getDefaultPayment().toString());
                 mp1.put("cardname", userPayment.getCardName().toString());
+                mp1.put("cardnumber", userPayment.getCardNumber());
+                mp1.put("cvc", userPayment.getCvc().toString());
+                mp1.put("year", userPayment.getExpiryYear().toString());
+                mp1.put("month", userPayment.getExpiryMonth().toString());
+                mp1.put("holdername", userPayment.getHolderName());
+                mp1.put("type", userPayment.getType());
+
+                mp1.put("userbillingcity", userBilling.getUserBillingCity());
+                mp1.put("userbillingname", userBilling.getUserBillingName());
+                mp1.put("userbillingstate", userBilling.getUserBillingState());
+                mp1.put("userbillingstreet1", userBilling.getUserBillingStreet1());
+                mp1.put("userbillingstreet2", userBilling.getUserBillingStreet2());
+                mp1.put("zipcode", userBilling.getUserBillingZipcode());
                 mps.add(mp1);
             }
             httpServletResponse.setContentType("application/json");

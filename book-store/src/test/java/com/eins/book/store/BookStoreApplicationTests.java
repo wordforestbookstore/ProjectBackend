@@ -62,24 +62,4 @@ public class BookStoreApplicationTests {
             System.out.println(book.getTitle());
         }
     }
-
-    @Test
-    public void testSha256() {
-        String str = "123456";
-        System.out.println(EncryptUtil.getSha256(str));
-    }
-
-    @Test
-    public void testdate() {
-        String Hour = DateUtils.getMonth();
-        int Month = Integer.parseInt(Hour);
-        int Year = Integer.parseInt(DateUtils.getYear());
-        System.out.println("Now Month is: " + Month + "and year is " + Year);
-    }
-
-    @Test
-    public void testcartemail() {
-        List<CartItem> cartItems = cartItemMapper.selectAll();
-        new EmailUtils().sendcart("1243299228@qq.com", 1l, "MZX", "MZX", "XLW", "NJUST", "cn", "NJ", "210094", "MZX", "visa", "123", "4", "20", "MZX", "XLW", "NJUST", "cn", "NJ", "210094", new EmailUtils().initSummary(cartItems));
-    }
 }

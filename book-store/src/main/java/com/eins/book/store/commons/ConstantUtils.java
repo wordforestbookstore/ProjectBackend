@@ -12,5 +12,5 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConstantUtils {
     public static Map<String, Long> adminLoginMap = new ConcurrentHashMap<String, Long>();
     public static Map<String, Long> userLoginMap = new ConcurrentHashMap<String, Long>();
-    public static Boolean productionTip = false;
+    public static Boolean productionTip = true;
 }

@@ -118,7 +118,9 @@ public class UserShippingController {
                 mp1.put("shippingstreet2", userShipping.getUserShippingStreet2());
                 mp1.put("shippingstate", userShipping.getUserShippingState());
                 mp1.put("shippingcity", userShipping.getUserShippingCity());
-
+                mp1.put("shippingname", userShipping.getUserShippingName());
+                mp1.put("zipcode", userShipping.getUserShippingZipcode());
+                mp1.put("userid", userShipping.getUserId().toString());
                 mps.add(mp1);
             }
             httpServletResponse.setContentType("application/json");
@@ -142,6 +144,7 @@ public class UserShippingController {
             mp.put("shippingname", userShipping.getUserShippingName());
             mp.put("zipcode", userShipping.getUserShippingZipcode());
             mp.put("id", userShipping.getId().toString());
+            mp.put("default", userShipping.getUserShippingDefault().toString());
             httpServletResponse.setContentType("application/json");
             return new ResponseEntity(mp, HttpStatus.OK);
         }

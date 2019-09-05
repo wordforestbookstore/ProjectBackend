@@ -67,74 +67,52 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity login(@RequestBody User ReqUser, Boolean admin, HttpServletResponse httpServletResponse,HttpServletRequest httpServletRequest) {
-
-        if(admin == true) {
-            if(userService.checkUserAdmin(ReqUser.getUsername())) {
-                Object user = userService.login(ReqUser.getUsername(), ReqUser.getPassword());
-                if(user == null) {
-                    httpServletResponse.setContentType("text/plain");
-                    return new ResponseEntity("Username not exits!", HttpStatus.BAD_REQUEST);
-                }
-                else {
-                    if(user.equals("Wrong password!")) {
-                        httpServletResponse.setContentType("text/plain");
-                        return new ResponseEntity("Wrong password!", HttpStatus.BAD_REQUEST);
-                    }
-                    else {
-                        User loginUser = (User) user;
-                        String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
-
-
-                        ConstantUtils.adminLoginMap.put(cookie, ((User) user).getId());
-                        Map<String, Object> mp = new HashMap<String, Object>();
-                        ((User) user).setPassword(null);
-                        mp.put("userInfo", user);
-                        mp.put("cookieID", cookie);
-
-                        httpServletResponse.setContentType("application/json");
-                        return new ResponseEntity(mp, HttpStatus.OK);
-                    }
-                }
-            }
-            else {
-                httpServletResponse.setContentType("text/plain");
-                return new ResponseEntity("Yor are not a admin!", HttpStatus.BAD_REQUEST);
-            }
+        Object user = userService.login(ReqUser.getUsername(), ReqUser.getPassword());
+        if(user == null) {
+            httpServletResponse.setContentType("text/plain");
+            return new ResponseEntity("Username not exits!", HttpStatus.BAD_REQUEST);
+        }
+        else if(user.equals("Wrong password!")) {
+            httpServletResponse.setContentType("text/plain");
+            return new ResponseEntity("Wrong password!", HttpStatus.BAD_REQUEST);
         }
         else {
-            if(!userService.checkUserAdmin(ReqUser.getUsername())) {
-                Object user = userService.login(ReqUser.getUsername(), ReqUser.getPassword());
-                if (user == null) {
+            if (admin == true) {
+                if (userService.checkUserAdmin(ReqUser.getUsername())) {
+                    User loginUser = (User) user;
+                    String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
+                    ConstantUtils.adminLoginMap.put(cookie, ((User) user).getId());
+                    Map<String, Object> mp = new HashMap<String, Object>();
+                    ((User) user).setPassword(null);
+                    mp.put("userInfo", user);
+                    mp.put("cookieID", cookie);
+                    httpServletResponse.setContentType("application/json");
+                    return new ResponseEntity(mp, HttpStatus.OK);
+                }
+                else {
                     httpServletResponse.setContentType("text/plain");
-                    return new ResponseEntity("Username not exits!", HttpStatus.BAD_REQUEST);
-                } else {
-                    if (user.equals("Wrong password!")) {
-                        httpServletResponse.setContentType("text/plain");
-                        return new ResponseEntity("Wrong password!", HttpStatus.BAD_REQUEST);
-                    } else {
-                        User loginUser = (User) user;
-                        String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
-
-
-
-                        ConstantUtils.userLoginMap.put(cookie, ((User) user).getId());
-                        Map<String, Object> mp = new HashMap<String, Object>();
-                        ((User) user).setPassword(null);
-                        mp.put("userInfo", user);
-                        mp.put("cookieID", cookie);
-
-                        httpServletResponse.setContentType("application/json");
-                        return new ResponseEntity(mp, HttpStatus.OK);
-                    }
+                    return new ResponseEntity("Yor are not a admin!", HttpStatus.BAD_REQUEST);
                 }
             }
             else {
-                httpServletResponse.setContentType("text/plain");
-                return new ResponseEntity("Yor are not a user!", HttpStatus.BAD_REQUEST);
+                if(!userService.checkUserAdmin(ReqUser.getUsername())) {
+                    User loginUser = (User) user;
+                    String cookie = new EncryptUtil().DESencode(loginUser.getUsername() + ":" + DateUtils.getStringDate(), "Salt");
+                    ConstantUtils.userLoginMap.put(cookie, ((User) user).getId());
+                    Map<String, Object> mp = new HashMap<String, Object>();
+                    ((User) user).setPassword(null);
+                    mp.put("userInfo", user);
+                    mp.put("cookieID", cookie);
+                    httpServletResponse.setContentType("application/json");
+                    return new ResponseEntity(mp, HttpStatus.OK);
+                }
+                else {
+                    httpServletResponse.setContentType("text/plain");
+                    return new ResponseEntity("Yor are not a user!", HttpStatus.BAD_REQUEST);
+                }
             }
         }
     }
-
 
     @CrossOrigin
     @RequestMapping(value = "/logout", method = RequestMethod.POST)

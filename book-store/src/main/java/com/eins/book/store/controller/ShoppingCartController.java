@@ -172,6 +172,7 @@ public class ShoppingCartController {
                 mp.put("category", book.getCategory());
                 mp.put("id", book.getId().toString());
                 mp.put("inStockNumber", book.getInStockNumber().toString());
+                mp.put("weight", book.getShippingWeight().toString());
                 books.add(mp);
             }
             httpServletResponse.setContentType("application/json");
