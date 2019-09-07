@@ -220,7 +220,9 @@ public class UserShippingController {
     @RequestMapping(value = "/ShippingDefault/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateShippingDefault(@PathVariable("id") Long userShippingId, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            Long oldUserShippingId = shippingService.getUserShippingIdByDefaultTrue();
+            Long userId = ConstantUtils.userLoginMap.get(cookie);
+            User user = userService.getUserById(userId);
+            Long oldUserShippingId = shippingService.getUserShippingIdByDefaultTrue(userId);
             UserShipping oldUserShipping = shippingService.getUserShippingByUserShippingId(oldUserShippingId);
             oldUserShipping.setUserShippingDefault(false);
             UserShipping newUserShipping = shippingService.getUserShippingByUserShippingId(userShippingId);
@@ -236,12 +238,12 @@ public class UserShippingController {
     @RequestMapping(value = "/Shipping/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deletDefault(@PathVariable("id") Long userShippingId, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
+            Long userId = ConstantUtils.userLoginMap.get(cookie);
+            User user = userService.getUserById(userId);
             UserShipping userShipping = shippingService.getUserShippingByUserShippingId(userShippingId);
             shippingService.delUserShipping(userShipping);
-            Long oldUserShippingId = shippingService.getUserShippingIdByDefaultTrue();
+            Long oldUserShippingId = shippingService.getUserShippingIdByDefaultTrue(userId);
             if(oldUserShippingId == 0l) {
-                Long userId = ConstantUtils.userLoginMap.get(cookie);
-                User user = userService.getUserById(userId);
                 List<Long> userShippingIds = shippingService.getUserShippingIdsByUserId(userId);
                 if(userShippingIds.size() == 0) {
                     httpServletResponse.setContentType("text/plain");

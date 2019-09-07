@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -206,7 +207,8 @@ public class UserServiceImpl implements UserService {
         /*为该用户初始化一个购物车插入*/
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUserId(user2.getId());
-        shoppingCart.setGrandTotal(0);
+        BigDecimal tmp = new BigDecimal(0.00);
+        shoppingCart.setGrandTotal(tmp);
         shoppingCartMapper.insert(shoppingCart);
     }
 

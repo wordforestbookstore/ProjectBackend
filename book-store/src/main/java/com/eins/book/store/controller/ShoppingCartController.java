@@ -41,7 +41,8 @@ public class ShoppingCartController {
         if (CookieUtils.CookieConfirm(cookie)) {
             Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
-            if(cartService.checkBookIdExisetInCartItem(bookId)) {
+            Long shoppingId = cartService.getShoppingCartIdByUserId(userid);
+            if(cartService.checkBookIdExistInCartItem(bookId, shoppingId)) {
                 /*update cart_item (id, bookid, orderid, qty, shopping_cart_id, subtotal) */
                 Long shoppingCartId = cartService.getShoppingCartIdByUserId(userid);
                 BigDecimal totalPrice = new BigDecimal(bookService.getUnitPriceByBookId(bookId) * (double)num);
@@ -59,7 +60,7 @@ public class ShoppingCartController {
                 /*update shopping_cart*/
                 // Long shoppingCartId = userService.getShoppingCartIdByUserId(userid);
                 ShoppingCart shoppingCart = cartService.getShoppingCartByShoppingCartId(shoppingCartId);
-                double totalMoney = shoppingCart.getGrandTotal() + addPrice.doubleValue();
+                BigDecimal totalMoney = shoppingCart.getGrandTotal().add(addPrice);
                 shoppingCart.setGrandTotal(totalMoney);
                 cartService.updateShoppingCart(shoppingCart);
             }
@@ -85,7 +86,7 @@ public class ShoppingCartController {
 
                 /*update shopping_cart*/
                 ShoppingCart shoppingCart = cartService.getShoppingCartByShoppingCartId(shoppingCartId);
-                double totalMoney = shoppingCart.getGrandTotal() + totalPrice.doubleValue();
+                BigDecimal totalMoney = shoppingCart.getGrandTotal().add(totalPrice);
                 shoppingCart.setGrandTotal(totalMoney);
                 cartService.updateShoppingCart(shoppingCart);
             }
@@ -117,7 +118,8 @@ public class ShoppingCartController {
 
                 /*update shoppingCart(id, grand_total, user_id)*/
                 ShoppingCart shoppingCart = cartService.getShoppingCartByShoppingCartId(shoppingCartId);
-                double money = shoppingCart.getGrandTotal() - dePrice;
+                BigDecimal tmpcost = new BigDecimal(dePrice);
+                BigDecimal money = shoppingCart.getGrandTotal().subtract(tmpcost);
                 shoppingCart.setGrandTotal(money);
                 cartService.updateShoppingCart(shoppingCart);
             }
@@ -133,8 +135,9 @@ public class ShoppingCartController {
 
                 /*update shoppingCart(id, grand_total, user_id)*/
                 ShoppingCart shoppingCart = cartService.getShoppingCartByShoppingCartId(shoppingCartId);
-                double money = shoppingCart.getGrandTotal() - dePrice;
-                shoppingCart.setGrandTotal(money);
+                double money = shoppingCart.getGrandTotal().doubleValue() - dePrice;
+                BigDecimal tmpcost = new BigDecimal(money);
+                shoppingCart.setGrandTotal(tmpcost);
                 cartService.updateShoppingCart(shoppingCart);
 
 
@@ -162,7 +165,7 @@ public class ShoppingCartController {
                 CartItem cartItem = cartService.getCartItemByCartItemId(cartItemId);
                 Long bookId = cartItem.getBookId();
                 Book book = (Book) bookService.getBookByID(bookId);
-
+                if(cartItem.getOrderId() != null) continue;
                 Map<String, String> mp = new HashMap<String, String>();
                 Long num = (long) cartItem.getQty();
                 mp.put("number", num.toString());

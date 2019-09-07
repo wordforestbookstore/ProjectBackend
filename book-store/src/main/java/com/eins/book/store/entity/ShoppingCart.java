@@ -13,7 +13,7 @@ public class ShoppingCart {
     private Long id;
 
     @Column(name = "grand_total")
-    private double grandTotal;
+    private BigDecimal grandTotal;
 
     @Column(name = "user_id")
     private Long userId;
@@ -35,14 +35,14 @@ public class ShoppingCart {
     /**
      * @return grand_total
      */
-    public double getGrandTotal() {
+    public BigDecimal getGrandTotal() {
         return grandTotal;
     }
 
     /**
      * @param grandTotal
      */
-    public void setGrandTotal(double grandTotal) {
+    public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
     }
 

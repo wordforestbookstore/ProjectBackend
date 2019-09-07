@@ -352,7 +352,9 @@ public class UserCreditCardController {
     @RequestMapping(value = "/updateDefault/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateDefault(@PathVariable("id") Long userPaymentId, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            Long oldUserPaymentid = billingService.getUserPaymentIdByDefaultTrue();
+            Long userId = ConstantUtils.userLoginMap.get(cookie);
+            User user = userService.getUserById(userId);
+            Long oldUserPaymentid = billingService.getUserPaymentIdByDefaultTrue(userId);
             UserPayment oldUserPayment = billingService.getUserPaymentByUserPaymentId(oldUserPaymentid);
             oldUserPayment.setDefaultPayment(false);
             UserPayment newUserPayment = billingService.getUserPaymentByUserPaymentId(userPaymentId);
@@ -370,16 +372,18 @@ public class UserCreditCardController {
     @RequestMapping(value = "/CreditCard/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deletDefault(@PathVariable("id") Long userPaymentId, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
+            Long userId = ConstantUtils.userLoginMap.get(cookie);
+            User user = userService.getUserById(userId);
             UserPayment userPayment = billingService.getUserPaymentByUserPaymentId(userPaymentId);
             Long userBillingId = billingService.getUserBillingIdByUserPaymentId(userPaymentId);
             UserBilling userBilling = billingService.getUserBillingByUserBillingId(userBillingId);
             billingService.delUserBilling(userBilling);
             billingService.delUserPayment(userPayment);
 
-            Long oldUserPaymentId = billingService.getUserPaymentIdByDefaultTrue();
+            Long oldUserPaymentId = billingService.getUserPaymentIdByDefaultTrue(userId);
             if(oldUserPaymentId == 0l) {
-                Long userId = ConstantUtils.userLoginMap.get(cookie);
-                User user = userService.getUserById(userId);
+//                Long userId = ConstantUtils.userLoginMap.get(cookie);
+//                User user = userService.getUserById(userId);
                 List<Long> userPaymentIds = billingService.getUserPaymentIdsByUserId(userId);
                 if(userPaymentIds.size() == 0) {
                     httpServletResponse.setContentType("text/plain");

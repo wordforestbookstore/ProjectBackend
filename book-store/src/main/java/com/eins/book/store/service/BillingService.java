@@ -1,5 +1,6 @@
 package com.eins.book.store.service;
 
+import com.eins.book.store.entity.BillingAddress;
 import com.eins.book.store.entity.UserBilling;
 import com.eins.book.store.entity.UserPayment;
 
@@ -17,7 +18,7 @@ public interface BillingService {
     public List<Long> getUserPaymentIdsByUserId(Long userId);
     public UserPayment getUserPaymentByUserPaymentId(Long userPaymentId);
     public boolean getDefaultByUserPaymentId(Long userPaymentId);
-    public Long getUserPaymentIdByDefaultTrue();
+    public Long getUserPaymentIdByDefaultTrue(Long userId);
     public void delUserPayment(UserPayment userPayment);
 
     /*userBilling*/
@@ -26,4 +27,11 @@ public interface BillingService {
     public Long getUserBillingIdByUserPaymentId(Long userPaymentId);
     public UserBilling getUserBillingByUserBillingId(Long userBillingId);
     public void delUserBilling(UserBilling userBilling);
+
+    /*BillingAddress*/
+    public Long getBillingAddressIdByOrderId(Long orderId);
+    public Long getBillingAddressIdByOrderIdNull();
+    public void insertBillingAddress(BillingAddress billingAddress);
+    public BillingAddress getBillingAdressById(Long id);
+    public void updateBillingAddress(BillingAddress billingAddress);
 }

@@ -81,5 +81,8 @@ public class BookServiceImpl implements BookService {
         return book.getOurPrice();
     }
 
-
+    @Override
+    public void updateBook(Book book) {
+        bookMapper.updateByPrimaryKeySelective(book);
+    }
 }

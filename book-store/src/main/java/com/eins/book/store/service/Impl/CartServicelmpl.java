@@ -42,8 +42,15 @@ public class CartServicelmpl implements CartService {
     public Long getCartItemIdByBookIdAndCartId(Long bookId, Long shoppingCartId) {
         Example example = new Example(CartItem.class);
         example.createCriteria().andEqualTo("bookId", bookId).andEqualTo("shoppingCartId", shoppingCartId);
-        CartItem cartItem = cartItemMapper.selectOneByExample(example);
-        return cartItem.getId();
+        List<CartItem> cartItems = cartItemMapper.selectByExample(example);
+        Long ans = 0l;
+        for (CartItem cartItem : cartItems) {
+            if(cartItem.getOrderId() == null) {
+                ans = cartItem.getId();
+                break;
+            }
+        }
+        return ans;
     }
 
     /*通过shoppingCartId获得购物车内所有的cartItemId*/
@@ -54,6 +61,18 @@ public class CartServicelmpl implements CartService {
         List<CartItem> cartItems = cartItemMapper.selectByExample(example);
         List<Long> cartItemIds = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
+            if(cartItem.getOrderId() == null) cartItemIds.add(cartItem.getId());
+        }
+        return cartItemIds;
+    }
+    /*通过userorderId获得CartItemIds*/
+    @Override
+    public List<Long> getCartItemIdsByUserOrderId(Long userOrderId) {
+        Example example = new Example(CartItem.class);
+        example.createCriteria().andEqualTo("orderId", userOrderId);
+        List<CartItem> cartItems = cartItemMapper.selectByExample(example);
+        List<Long> cartItemIds = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
             cartItemIds.add(cartItem.getId());
         }
         return cartItemIds;
@@ -61,16 +80,24 @@ public class CartServicelmpl implements CartService {
 
     /*检查bookid是否在Cartitem中*/
     @Override
-    public boolean checkBookIdExisetInCartItem(Long bookId) {
+    public boolean checkBookIdExistInCartItem(Long bookId, Long shoppingCartId) {
         Example example = new Example(CartItem.class);
-        example.createCriteria().andEqualTo("bookId", bookId);
-        CartItem cartItem = cartItemMapper.selectOneByExample(example);
-        if(cartItem == null) {
-            return false;
+        example.createCriteria().andEqualTo("bookId", bookId).andEqualTo("shoppingCartId", shoppingCartId);
+        List<CartItem> cartItems = cartItemMapper.selectByExample(example);
+        boolean flag = false;
+        for (CartItem cartItem : cartItems) {
+            if(cartItem.getOrderId() == null) {
+                flag = true;
+            }
         }
-        else {
-            return true;
-        }
+        if(flag == true) return true;
+        return false;
+//        if(cartItem == null) {
+//            return false;
+//        }
+//        else {
+//            return true;
+//        }
     }
 
     /*通过CartItemid获得CartItem*/

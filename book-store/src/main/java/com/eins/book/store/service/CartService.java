@@ -13,7 +13,8 @@ public interface CartService {
     public void insertCartItem(CartItem bookToCartItem);
     public Long getCartItemIdByBookIdAndCartId(Long bookId, Long shoppingCartId);
     public List<Long> getCarItemIdsByShoppingCartId(Long shoppingCartId);
-    public boolean checkBookIdExisetInCartItem(Long bookId);
+    public List<Long> getCartItemIdsByUserOrderId(Long UserOrderId);
+    public boolean checkBookIdExistInCartItem(Long bookId, Long shoppingCartId);
     public CartItem getCartItemByCartItemId(Long CartItemId);
     public void updateCartItem(CartItem cartItem);
     public void delCartItem(CartItem cartItem);

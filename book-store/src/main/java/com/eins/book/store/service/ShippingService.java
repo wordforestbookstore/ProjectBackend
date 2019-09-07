@@ -1,5 +1,6 @@
 package com.eins.book.store.service;
 
+import com.eins.book.store.entity.ShippingAddress;
 import com.eins.book.store.entity.UserShipping;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +16,12 @@ public interface ShippingService {
     public List<Long> getUserShippingIdsByUserId(Long userId);
     public UserShipping getUserShippingByUserShippingId(Long userShippingid);
     public Long getUserShippingIdByUserIdAndStreetAndCityAndName(Long userId, String shippingStreet1, String shippingStreet2, String shippingCity, String shippingName);
-    public Long getUserShippingIdByDefaultTrue();
+    public Long getUserShippingIdByDefaultTrue(Long userId);
+
+    /*shippingAddress*/
+    public Long getShippingAddressIdByOrderId(Long orderId);
+    public Long getShippingAddressIdByOrderIdNull();
+    public void insertShippingAddress(ShippingAddress shippingAddress);
+    public ShippingAddress getShippingAddressById(Long id);
+    public void updateShippingAddress(ShippingAddress shippingAddress);
 }

@@ -1,10 +1,9 @@
 package com.eins.book.store.service.Impl;
 
+import com.eins.book.store.dao.BillingAddressMapper;
 import com.eins.book.store.dao.UserBillingMapper;
 import com.eins.book.store.dao.UserPaymentMapper;
-import com.eins.book.store.entity.Book;
-import com.eins.book.store.entity.UserBilling;
-import com.eins.book.store.entity.UserPayment;
+import com.eins.book.store.entity.*;
 import com.eins.book.store.service.BillingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,9 @@ public class BillingServicelmpl implements BillingService {
 
     @Autowired
     private UserBillingMapper userBillingMapper;
+
+    @Autowired
+    private BillingAddressMapper billingAddressMapper;
 
     /*检查该user中是否存在Card(payment)*/
     @Override
@@ -126,10 +128,10 @@ public class BillingServicelmpl implements BillingService {
     }
 
     /*找到Default为true的userPayment*/
-    public Long getUserPaymentIdByDefaultTrue() {
+    public Long getUserPaymentIdByDefaultTrue(Long userId) {
         boolean flag = true;
         Example example = new Example(UserPayment.class);
-        example.createCriteria().andEqualTo("defaultPayment", flag);
+        example.createCriteria().andEqualTo("defaultPayment", flag).andEqualTo("userId", userId);
         UserPayment userPayment = userPaymentMapper.selectOneByExample(example);
         if(userPayment == null) {
             return 0l;
@@ -171,5 +173,52 @@ public class BillingServicelmpl implements BillingService {
     /*删除userBilling*/
     public void delUserBilling(UserBilling userBilling) {
         userBillingMapper.deleteByPrimaryKey(userBilling);
+    }
+
+    /*通过OrderId得到billingAddressId*/
+    public Long getBillingAddressIdByOrderId(Long orderId) {
+        Example example = new Example(BillingAddress.class);
+        example.createCriteria().andEqualTo("orderId", orderId);
+        BillingAddress billingAddress = billingAddressMapper.selectOneByExample(example);
+        if(billingAddress == null) {
+            return 0l;
+        }
+        return billingAddress.getId();
+    }
+    /*获得orderId为空的billingaddressId*/
+    public Long getBillingAddressIdByOrderIdNull() {
+        Example example = new Example(BillingAddress.class);
+        List<BillingAddress> billingAddresseses = billingAddressMapper.selectAll();
+        if(billingAddresseses.size() == 0) {
+            return 0l;
+        }
+        Long res = 0l;
+        for (BillingAddress billingAddressese : billingAddresseses) {
+            if(billingAddressese.getOrderId() == null) {
+                res = billingAddressese.getId();
+            }
+        }
+        return res;
+    }
+    /*插入billingAddress*/
+    public void insertBillingAddress(BillingAddress billingAddress) {
+        billingAddressMapper.insert(billingAddress);
+    }
+
+    @Override
+    public BillingAddress getBillingAdressById(Long id) {
+        Example example = new Example(BillingAddress.class);
+        example.createCriteria().andEqualTo("id", id);
+        BillingAddress billingAddress = billingAddressMapper.selectOneByExample(example);
+        if(billingAddress == null) {
+            return null;
+        }
+        return billingAddress;
+    }
+
+    /**/
+    @Override
+    public void updateBillingAddress(BillingAddress billingAddress) {
+        billingAddressMapper.updateByPrimaryKeySelective(billingAddress);
     }
 }

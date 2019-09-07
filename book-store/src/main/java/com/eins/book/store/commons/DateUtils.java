@@ -1,4 +1,6 @@
 package com.eins.book.store.commons;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -56,6 +58,11 @@ public class DateUtils {
     public static String getStringDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());
+        return dateString;
+    }
+    public static String getStringDate(Date NowDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(NowDate);
         return dateString;
     }
 
@@ -831,33 +838,33 @@ public class DateUtils {
         return i;
     }
 
-    public static String[] getFiveDate() {
-        String[] dates = new String[2];
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        String five = " 05:00:00";
+//    public static String[] getFiveDate() {
+//        String[] dates = new String[2];
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Date());
+//        String five = " 05:00:00";
+//
+//        if (getDateAMPM().equals("AM") && compareToDateString(getStringDate(), getStringDateShort() + five) == -1) {
+//            dates[0] = getBeforeDay(calendar) + five;
+//            dates[1] = getStringDateShort() + five;
+//        } else {
+//            dates[0] = getStringDateShort() + five;
+//            dates[1] = getAfterDay(calendar) + five;
+//        }
+//
+//        return dates;
+//    }
 
-        if (getDateAMPM().equals("AM") && compareToDateString(getStringDate(), getStringDateShort() + five) == -1) {
-            dates[0] = getBeforeDay(calendar) + five;
-            dates[1] = getStringDateShort() + five;
-        } else {
-            dates[0] = getStringDateShort() + five;
-            dates[1] = getAfterDay(calendar) + five;
-        }
-
-        return dates;
-    }
-
-    public static String getFiveDate2() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        String five = " 05:00:00";
-        String reStr = "";
-        if (getDateAMPM().equals("AM") && compareToDateString(getStringDate(), getStringDateShort() + five) == -1) {
-            reStr = getBeforeDay(calendar);
-        } else {
-            reStr = getStringDateShort();
-        }
-        return reStr;
-    }
+//    public static String getFiveDate2() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Date());
+//        String five = " 05:00:00";
+//        String reStr = "";
+//        if (getDateAMPM().equals("AM") && compareToDateString(getStringDate(), getStringDateShort() + five) == -1) {
+//            reStr = getBeforeDay(calendar);
+//        } else {
+//            reStr = getStringDateShort();
+//        }
+//        return reStr;
+//    }
 }

@@ -15,7 +15,7 @@ public interface BookService {
     public void DeleteBook(Book book);
     public Object getBookListByCategory(int l, int r, String category);
     public double getUnitPriceByBookId(Long bookId);
-
+    public void updateBook(Book book);
 
 
 }
