@@ -39,11 +39,13 @@ public class BookController {
         Integer beforeInStockNumber = book.getInStockNumber();
         if (book != null) {
             httpServletResponse.setContentType("application/json");
-            if(cartService.checkBookIdExistInCartItem(book.getId(), cartService.getShoppingCartIdByUserId(userId))) {
-                for (CartItem cartItem : cartItems) {
-                    beforeInStockNumber -= cartItem.getQty();
+            if(userId != null) {
+                if (cartService.checkBookIdExistInCartItem(book.getId(), cartService.getShoppingCartIdByUserId(userId))) {
+                    for (CartItem cartItem : cartItems) {
+                        beforeInStockNumber -= cartItem.getQty();
+                    }
+                    book.setInStockNumber(Math.max(beforeInStockNumber, 0));
                 }
-                book.setInStockNumber(Math.max(beforeInStockNumber, 0));
             }
             return new ResponseEntity(book, HttpStatus.OK);
         }
