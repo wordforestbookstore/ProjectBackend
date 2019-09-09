@@ -1,5 +1,6 @@
 package com.eins.book.store.service;
 
+import com.eins.book.store.entity.Book;
 import com.eins.book.store.entity.BookToCartItem;
 import com.eins.book.store.entity.CartItem;
 import com.eins.book.store.entity.ShoppingCart;
@@ -18,6 +19,7 @@ public interface CartService {
     public CartItem getCartItemByCartItemId(Long CartItemId);
     public void updateCartItem(CartItem cartItem);
     public void delCartItem(CartItem cartItem);
+    public List<CartItem> getCartsByBookId(Long id);
 
 
     /*BookToCartItem*/

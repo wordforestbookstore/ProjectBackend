@@ -47,7 +47,7 @@ public class OrderController {
     @RequestMapping(value = "/Order", method = RequestMethod.POST)
     public ResponseEntity addOrder(@RequestBody Map<String, String> mp, String cookie, HttpServletResponse httpServletResponse, HttpServletRequest httpServletRequest) {
         if (CookieUtils.CookieConfirm(cookie)) {
-            System.out.println(mp);
+            //System.out.println(mp);
             String tmp = mp.get("ids");
             String[] tmps = tmp.split(",");
             List<Long> bookIds = new ArrayList<>();
@@ -61,6 +61,21 @@ public class OrderController {
             User user = userService.getUserById(userId);
             Long shoppingCartId = cartService.getShoppingCartIdByUserId(userId);
             Long OrderId = orderService.getUserOrderLastId() + 1;
+            /*检查库存量是否足够*/
+            for (Long bookId : bookIds) {
+                Long cartItemId = cartService.getCartItemIdByBookIdAndCartId(bookId, shoppingCartId);
+                CartItem cartItem = cartService.getCartItemByCartItemId(cartItemId);
+                //cartItemList.add(cartItem);
+                //cartItem.setOrderId(OrderId);
+                //cartService.updateCartItem(cartItem);
+                Book book = (Book) bookService.getBookByID(bookId);
+                int denum = cartItem.getQty();
+                int rest = book.getInStockNumber();
+                if(denum > rest) {
+                    httpServletResponse.setContentType("text/plain");
+                    return new ResponseEntity("Instocknumber is not enough", HttpStatus.BAD_REQUEST);
+                }
+            }
 
             /*insert billing_address(city, country, name, state, street1, street2, zipcode, order_id)*/
             BillingAddress billingAddress = new BillingAddress();
@@ -219,7 +234,7 @@ public class OrderController {
             userOrder.setPaymentId(paymentId);
             userOrder.setShippingAddressId(shippingAddressId);
             orderService.insertUserOrder(userOrder);
-            System.out.println("OrderId: " + OrderId);
+            //System.out.println("OrderId: " + OrderId);
             billingAddress.setOrderId(OrderId);
             payment.setOrderId(OrderId);
             shippingAddress.setOrderId(OrderId);

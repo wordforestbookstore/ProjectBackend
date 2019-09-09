@@ -42,7 +42,9 @@ public class ShoppingCartController {
             Long userid = ConstantUtils.userLoginMap.get(cookie);
             User user = userService.getUserById(userid);
             Long shoppingId = cartService.getShoppingCartIdByUserId(userid);
+            int inStockNumber = bookService.getInStockNumberByBookId(bookId);
             if(cartService.checkBookIdExistInCartItem(bookId, shoppingId)) {
+
                 /*update cart_item (id, bookid, orderid, qty, shopping_cart_id, subtotal) */
                 Long shoppingCartId = cartService.getShoppingCartIdByUserId(userid);
                 BigDecimal totalPrice = new BigDecimal(bookService.getUnitPriceByBookId(bookId) * (double)num);
@@ -50,6 +52,10 @@ public class ShoppingCartController {
                 Long cartItemId = cartService.getCartItemIdByBookIdAndCartId(bookId, shoppingCartId);
                 CartItem cartItem = cartService.getCartItemByCartItemId(cartItemId);
                 num = cartItem.getQty() + num;
+                if(num > inStockNumber){
+                    httpServletResponse.setContentType("text/plain");
+                    return new ResponseEntity("Instocknumber is not enough", HttpStatus.BAD_REQUEST);
+                }
                 cartItem.setQty(num);
 
                 totalPrice = totalPrice.add(cartItem.getSubtotal());
@@ -67,7 +73,10 @@ public class ShoppingCartController {
             else {
                 Long shoppingCartId = cartService.getShoppingCartIdByUserId(userid);
                 BigDecimal totalPrice = new BigDecimal(bookService.getUnitPriceByBookId(bookId) * (double) num);
-
+                if(num > inStockNumber){
+                    httpServletResponse.setContentType("text/plain");
+                    return new ResponseEntity("Instocknumber is not enough", HttpStatus.BAD_REQUEST);
+                }
                 /*insert cart_item (id, bookid, orderid, qty, shopping_cart_id, subtotal) */
                 CartItem cartItem = new CartItem();
                 cartItem.setBookId(bookId);

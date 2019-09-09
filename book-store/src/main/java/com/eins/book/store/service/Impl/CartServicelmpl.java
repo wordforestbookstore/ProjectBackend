@@ -4,6 +4,7 @@ import com.eins.book.store.dao.BookMapper;
 import com.eins.book.store.dao.BookToCartItemMapper;
 import com.eins.book.store.dao.CartItemMapper;
 import com.eins.book.store.dao.ShoppingCartMapper;
+import com.eins.book.store.entity.Book;
 import com.eins.book.store.entity.BookToCartItem;
 import com.eins.book.store.entity.CartItem;
 import com.eins.book.store.entity.ShoppingCart;
@@ -119,6 +120,13 @@ public class CartServicelmpl implements CartService {
     @Override
     public void delCartItem(CartItem cartItem) {
         cartItemMapper.deleteByPrimaryKey(cartItem);
+    }
+
+    @Override
+    public List<CartItem> getCartsByBookId(Long id) {
+        Example example = new Example(CartItem.class);
+        example.createCriteria().andEqualTo("bookId", id);
+        return cartItemMapper.selectByExample(example);
     }
 
     /*插入bookToCartItem*/

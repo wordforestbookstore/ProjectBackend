@@ -82,6 +82,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public int getInStockNumberByBookId(Long bookId) {
+        Example example = new Example(Book.class);
+        example.createCriteria().andEqualTo("id", bookId);
+        Book book = bookMapper.selectOneByExample(example);
+        return book.getInStockNumber();
+    }
+    @Override
     public void updateBook(Book book) {
         bookMapper.updateByPrimaryKeySelective(book);
     }
